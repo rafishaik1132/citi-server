@@ -4,7 +4,7 @@ public class LoginResponse {
 	
 	 private String token;
 
-	  private String expiresIn;
+	  private Long expiresIn;
 
 	public String getToken() {
 		return token;
@@ -14,11 +14,11 @@ public class LoginResponse {
 		this.token = token;
 	}
 
-	public String getExpiresIn() {
+	public Long getExpiresIn() {
 		return expiresIn;
 	}
 
-	public void setExpiresIn(String expiresIn) {
+	public void setExpiresIn(Long expiresIn) {
 		this.expiresIn = expiresIn;
 	}
 

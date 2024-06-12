@@ -10,9 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table (name = "employee")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employee {
 	
 	@Id
@@ -94,6 +100,11 @@ public class Employee {
 
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+
+	public static Object builder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 
