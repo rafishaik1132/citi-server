@@ -9,10 +9,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,15 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citibank.model.Employee;
+import com.citibank.model.User;
 import com.citibank.repository.EmployeeRepository;
 import com.citibank.services.EmployeeService;
 
-@RequestMapping("/auth")
+@RequestMapping("/api")
 @RestController
 @CrossOrigin(origins="http://localhost:4200")
 public class EmployeeController {
 	
-	static final Logger logger  = LogManager.getLogger(EmployeeController.class.getName());
+	 Logger logger  = LogManager.getLogger(EmployeeController.class);
 
 	@Autowired
 	private EmployeeService employeeService;
@@ -81,12 +83,12 @@ public class EmployeeController {
 		}
 	}
 	
-	
 	@PutMapping("/employees/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable("id") int id, @RequestBody Employee employee) {
 		Optional<Employee> employeeData = employeeRepository.findById(id);
 
 		if (employeeData.isPresent()) {
+			logger.info("update employee data"+employeeData);
 			Employee updatedData = employeeData.get();
 			updatedData.setFirstName(employee.getFirstName());
 			updatedData.setLastName(employee.getLastName());

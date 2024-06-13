@@ -11,12 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
+	
+	Logger logger  = LogManager.getLogger(JwtService.class);
 	
 	@Value("${security.jwt.secret-key}")
     private String secretKey;
@@ -62,6 +66,7 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        logger.info("usrr name"+username);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 

@@ -36,9 +36,6 @@ public class RegisterUserDto {
 	public String toString() {
 		return "RegisterUserDto [email=" + email + ", password=" + password + ", fullName=" + fullName + "]";
 	}
-	
-	
-	 
-	 
+
 
 }

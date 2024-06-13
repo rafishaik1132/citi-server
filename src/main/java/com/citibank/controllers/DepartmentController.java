@@ -25,12 +25,12 @@ import com.citibank.model.Employee;
 import com.citibank.repository.DepartmentRepository;
 import com.citibank.services.DepartmentService;
 
-@RequestMapping("/auth")
+@RequestMapping("/api")
 @RestController
 @CrossOrigin(origins="http://localhost:4200")
 public class DepartmentController {
 	
-static final Logger logger  = LogManager.getLogger(DepartmentController.class.getName());
+          Logger logger  = LogManager.getLogger(DepartmentController.class);
 	
 	@Autowired
 	private DepartmentService departmentService;
@@ -46,7 +46,7 @@ static final Logger logger  = LogManager.getLogger(DepartmentController.class.ge
 			
 			try {
 				List<Department> departments = new ArrayList<Department>();
-				if (departments == null)
+				if (departments == null || departments.isEmpty())
 					departmentService.getAllDepartments().forEach(departments::add);
 
 				if (departments.isEmpty()) {
@@ -64,7 +64,8 @@ static final Logger logger  = LogManager.getLogger(DepartmentController.class.ge
 		@GetMapping("/departments/{id}")
 		public ResponseEntity<Department> getDepartment(@PathVariable("id") int id) {
 			Optional<Department> departmentData = departmentService.getDepartment(id);
-
+			
+			logger.info("department data"+departmentData);
 			if (departmentData.isPresent()) {
 				return new ResponseEntity<>(departmentData.get(), HttpStatus.OK);
 			} else {
@@ -77,6 +78,7 @@ static final Logger logger  = LogManager.getLogger(DepartmentController.class.ge
 		public ResponseEntity<Department> addDepartment(@RequestBody Department department) {
 			try {
 				Department departmentData =departmentService.addDepartment(department);
+				logger.info("add department response"+departmentData);
 				return new ResponseEntity<>(departmentData, HttpStatus.CREATED);
 			} catch (Exception e) {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -88,6 +90,7 @@ static final Logger logger  = LogManager.getLogger(DepartmentController.class.ge
 			Optional<Department> departmentData = departmentRepo.findById(id);
 
 			if (departmentData.isPresent()) {
+				logger.info("inside update department");
 				Department updatedData = departmentData.get();
 				updatedData.setDepartment_Name(department.getDepartment_Name());
 				updatedData.setShort_Name(department.getShort_Name());

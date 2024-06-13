@@ -19,6 +19,5 @@ public interface DepartmentService {
 
 	void deleteDepartmentByID(int id);
 
-	void patchDepartment(Department d, int id);
 
 }

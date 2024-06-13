@@ -3,6 +3,8 @@ package com.citibank.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import com.citibank.repository.DepartmentRepository;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
+	
+	Logger logger  = LogManager.getLogger(DepartmentServiceImpl.class);
 	
 	@Autowired
 	private DepartmentRepository departmentRepository;
@@ -49,11 +53,5 @@ public class DepartmentServiceImpl implements DepartmentService {
 		departmentRepository.deleteById(id);
 	}
 	
-	//patching/updating department by id
-	public void patchDepartment(Department d, int id) {
-		if(id == d.getDepartment_ID()) {
-			departmentRepository.save(d);
-		}
-	}
 
 }

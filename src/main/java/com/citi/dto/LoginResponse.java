@@ -22,7 +22,4 @@ public class LoginResponse {
 		this.expiresIn = expiresIn;
 	}
 
-	
-	  
-
 }

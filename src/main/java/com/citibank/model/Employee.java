@@ -41,6 +41,27 @@ public class Employee {
 	@Column(name="employee_salary")
 	private String employeeSalary; 
 	
+	
+	
+	
+	
+	
+	public Employee(int employeeID, String firstName, String lastName, Long employeePhone, String employeeGender,
+			String employeeSalary, Department department) {
+		super();
+		this.employeeID = employeeID;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.employeePhone = employeePhone;
+		this.employeeGender = employeeGender;
+		this.employeeSalary = employeeSalary;
+		this.department = department;
+	}
+
+	public Employee() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name="department_id")
@@ -102,10 +123,11 @@ public class Employee {
 		this.department = department;
 	}
 
-	public static Object builder() {
+	public static Employee builder() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
 
 }
