@@ -1,6 +1,9 @@
 package com.citibank.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.citibank.model.Department;
-import com.citibank.model.Employee;
 import com.citibank.repository.DepartmentRepository;
 import com.citibank.services.DepartmentServiceImpl;
 
@@ -74,7 +76,22 @@ public class DepartmentServiceTests {
 		      verify(departmentRepository, times(1)).findById(1);
 	    }
 	    
-
-	
+	    
+	    @Test
+	    public void testDelete() {
+	    	int id=1;
+	    	departmentService.deleteDepartmentByID(id);
+	  	   verify(departmentRepository,times(1)).deleteById(id);  	
+	    }
+	    
+	    @Test
+	    public void testupdateDepartment()
+	    {
+	    	  Department depOne = new Department(1,"IT", "Information Technology");
+	    	  departmentService.updateDepartment(depOne, 1);
+	    	  verify(departmentRepository,times(1)).save(depOne);
+	    	
+	    }
+	    
 
 }

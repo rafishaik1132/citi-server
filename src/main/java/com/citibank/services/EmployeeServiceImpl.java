@@ -38,10 +38,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 	
-	// deleting all employees
-	public void deleteAllEmployees(){
-		employeeRepository.deleteAll();
-	}
 	
 	// deleting employee by id
 	public void deleteEmployeeByID(int id){

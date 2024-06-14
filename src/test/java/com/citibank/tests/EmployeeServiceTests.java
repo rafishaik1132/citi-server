@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.citibank.model.Department;
 import com.citibank.model.Employee;
 import com.citibank.repository.EmployeeRepository;
 import com.citibank.services.EmployeeServiceImpl;
@@ -61,6 +62,14 @@ public class EmployeeServiceTests {
 	    }
 	    
 	    @Test
+	    public void testEmployeeDelete() {
+	    	int id=1;
+	    	
+	    	employeeService.deleteEmployeeByID(id);
+	  	   verify(employeeRepository,times(1)).deleteById(id);  	
+	    }
+	    
+	    @Test
 	    public void testFindById() {
 	        //given
 	    	Optional<Employee> user = Optional.ofNullable(new Employee());
@@ -80,8 +89,13 @@ public class EmployeeServiceTests {
 		      assertEquals(1,1);
 		      verify(employeeRepository, times(1)).findById(1);
 	    }
+	    @Test
+	    public void testupdateEmployee()
+	    {
+	    	 Employee empOne = new Employee(1,"John", "John",22222l,"j","33333",null);
+	    	 employeeService.updateEmployee(empOne, 1);
+	    	  verify(employeeRepository,times(1)).save(empOne);
+	    	
+	    }
 	    
-
-	
-
 }

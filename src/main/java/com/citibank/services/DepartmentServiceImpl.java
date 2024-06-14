@@ -43,10 +43,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 	}
 	
-	// deleting all departments
-	public void deleteAllDepartment(){
-		departmentRepository.deleteAll();
-	}
 	
 	// deleting department by id
 	public void deleteDepartmentByID(int id){

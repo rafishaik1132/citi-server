@@ -101,13 +101,6 @@ public class DepartmentController {
 			}
 		}
 		
-		// deleting all department
-		@DeleteMapping("/departments")
-		public void deleteAllDepartments(){
-			departmentService.deleteAllDepartment();
-		}
-
-		
 		
 		@DeleteMapping("departments/{id}")
 		public ResponseEntity<HttpStatus> deleteDepartmentById(@PathVariable("id") int id) {
