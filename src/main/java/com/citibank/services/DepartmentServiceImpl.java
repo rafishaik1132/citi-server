@@ -22,7 +22,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	// fetching all department
 	public List<Department> getAllDepartments(){
-		List<Department> depts = (List<Department>)departmentRepository.findAll(); 
+		List<Department> depts = (List<Department>)departmentRepository.findAll();
 		return depts;
 	}
 	

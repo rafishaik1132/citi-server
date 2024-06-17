@@ -10,9 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table (name = "employee")
@@ -38,10 +36,6 @@ public class Employee {
 	
 	@Column(name="employee_salary")
 	private String employeeSalary; 
-	
-	
-	
-	
 	
 	
 	public Employee(int employeeID, String firstName, String lastName, Long employeePhone, String employeeGender,

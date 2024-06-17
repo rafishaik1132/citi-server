@@ -41,8 +41,8 @@ public class EmployeeController {
 	
 	// displaying list of all employees
 	@GetMapping("/employees")
-	public ResponseEntity<List<Employee>> getAllEmployee(){
-		
+	public ResponseEntity<?> getAllEmployee(){
+		logger.info("inside getAllEmployess::{}");
 		try {
 			List<Employee> employees = new ArrayList<Employee>();
 			if (employees == null)
@@ -50,42 +50,46 @@ public class EmployeeController {
 				employeeService.getAllEmployees().forEach(employees::add);
 
 			if (employees.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				return new ResponseEntity<>("Could not get employees,because data not present",HttpStatus.NO_CONTENT);
 			}
 
 			return new ResponseEntity<>(employees, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Could not get employees,try again"+e.getStackTrace(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	
 	@GetMapping("/employees/{id}")
-	public ResponseEntity<Employee> getEmployee(@PathVariable("id") int id) {
+	public ResponseEntity<?> getEmployee(@PathVariable("id") int id) {
 		Optional<Employee> employeeData = employeeService.getEmployee(id);
+		logger.info("get employeee data"+employeeData);
 
 		if (employeeData.isPresent()) {
 			return new ResponseEntity<>(employeeData.get(), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity
+		            .status(HttpStatus.NOT_FOUND)
+		            .body("Could not get employee due to data not present for id"+id);
+
 		}
 	}
 	
-	
-
 	@PostMapping("/employees")
-	public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+	public ResponseEntity<?> createEmployee(@RequestBody Employee employee) {
 		try {
 			Employee employeeData =employeeService.addEmployee(employee) ;
+			logger.info("add employee data"+employeeData);
 			return new ResponseEntity<>(employeeData, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Could not add the employee"+e.getStackTrace(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@PutMapping("/employees/{id}")
-	public ResponseEntity<Employee> updateEmployee(@PathVariable("id") int id, @RequestBody Employee employee) {
+	public ResponseEntity<?> updateEmployee(@PathVariable("id") int id, @RequestBody Employee employee) {
 		Optional<Employee> employeeData = employeeRepository.findById(id);
+		logger.info("employee data"+employeeData);
 
 		if (employeeData.isPresent()) {
 			logger.info("update employee data"+employeeData);
@@ -98,18 +102,31 @@ public class EmployeeController {
 			updatedData.setDepartment(employee.getDepartment());
 			return new ResponseEntity<>(employeeRepository.save(updatedData), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity
+		            .status(HttpStatus.NOT_FOUND)
+		            .body("Employee does not exists for id "+id);
+
 		}
 	}
 	
 	
 	@DeleteMapping("employees/{id}")
-	public ResponseEntity<HttpStatus> deleteEmployeeById(@PathVariable("id") int id) {
+	public ResponseEntity<?> deleteEmployeeById(@PathVariable("id") int id) {
+		logger.info("delete employee:{}"+id);
+		Optional<Employee> employeeData = employeeService.getEmployee(id);
+		if (!employeeData.isEmpty()) {		
 		try {
 			employeeService.deleteEmployeeByID(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		}else
+		{
+			return ResponseEntity
+		            .status(HttpStatus.NOT_FOUND)
+		            .body("Could not delete  employee,because data not present");
+			
 		}
 	}
 

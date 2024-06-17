@@ -42,51 +42,54 @@ public class DepartmentController {
 		
 		
 		@GetMapping("/departments")
-		public ResponseEntity<List<Department>> getAllDepartments(){
-			
+		public ResponseEntity<?> getAllDepartments(){
+			logger.info("inside getAllDepartments:{}");
 			try {
 				List<Department> departments = new ArrayList<Department>();
+			
 				if (departments == null || departments.isEmpty())
 					departmentService.getAllDepartments().forEach(departments::add);
 
 				if (departments.isEmpty()) {
-					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+					return new ResponseEntity<>(departments,HttpStatus.NO_CONTENT);
 				}
 
 				return new ResponseEntity<>(departments, HttpStatus.OK);
 			} catch (Exception e) {
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>("Could not get departments,try again"+e.getStackTrace(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		
 		
 		
 		@GetMapping("/departments/{id}")
-		public ResponseEntity<Department> getDepartment(@PathVariable("id") int id) {
+		public ResponseEntity<?> getDepartment(@PathVariable("id") int id) {
 			Optional<Department> departmentData = departmentService.getDepartment(id);
 			
 			logger.info("department data"+departmentData);
 			if (departmentData.isPresent()) {
 				return new ResponseEntity<>(departmentData.get(), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return ResponseEntity
+			            .status(HttpStatus.NOT_FOUND)
+			            .body("Could not get department due to data not present for id"+id);
 			}
 		}
 	
 		
 		@PostMapping("/departments")
-		public ResponseEntity<Department> addDepartment(@RequestBody Department department) {
+		public ResponseEntity<?> addDepartment(@RequestBody Department department) {
 			try {
 				Department departmentData =departmentService.addDepartment(department);
 				logger.info("add department response"+departmentData);
 				return new ResponseEntity<>(departmentData, HttpStatus.CREATED);
 			} catch (Exception e) {
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>("Could not add the department"+e.getStackTrace(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 
 		@PutMapping("/departments/{id}")
-		public ResponseEntity<Department> updateDepartment(@PathVariable("id") int id, @RequestBody Department department) {
+		public ResponseEntity<?> updateDepartment(@PathVariable("id") int id, @RequestBody Department department) {
 			Optional<Department> departmentData = departmentRepo.findById(id);
 
 			if (departmentData.isPresent()) {
@@ -97,18 +100,29 @@ public class DepartmentController {
 				
 				return new ResponseEntity<>(departmentRepo.save(updatedData), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return ResponseEntity
+			            .status(HttpStatus.NOT_FOUND)
+			            .body("Department does not exists for id "+id);
 			}
 		}
 		
 		
 		@DeleteMapping("departments/{id}")
-		public ResponseEntity<HttpStatus> deleteDepartmentById(@PathVariable("id") int id) {
+		public ResponseEntity<?> deleteDepartmentById(@PathVariable("id") int id) {
+			logger.info("deleteDepartment:{}", id);
+			Optional<Department> departmentData = departmentService.getDepartment(id);
+			if (!departmentData.isEmpty()) {
 			try {
 				departmentService.deleteDepartmentByID(id);
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			} catch (Exception e) {
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>("Department deleted successfully",HttpStatus.OK);
+			} 
+			catch (Exception e) {
+				return new ResponseEntity<>("Could not delete the department,try again",HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			}else {
+				return ResponseEntity
+			            .status(HttpStatus.NOT_FOUND)
+			            .body("Could not delete the department,because data not present");
 			}
 		}
 

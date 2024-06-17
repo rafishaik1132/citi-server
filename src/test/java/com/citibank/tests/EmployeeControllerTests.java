@@ -15,35 +15,36 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.citibank.model.Department;
+import com.citibank.model.Employee;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc(addFilters = false)
 @Import(SecurityConfigTest.class)
-public class DepartmentControllerTests {
-
+public class EmployeeControllerTests {
+	
+	
 	@Autowired
 	  private MockMvc mvc;
 	
 	@Test
-	public void getAllDepartments() throws Exception 
+	public void getAllEmployee() throws Exception 
 	{
 	  mvc.perform(MockMvcRequestBuilders
-	  			.get("/api/departments")
+	  			.get("/api/employees")
 	  			.accept(MediaType.APPLICATION_JSON))
 	      .andDo(print())
 	      .andExpect(status().isOk())
-	      .andExpect(MockMvcResultMatchers.jsonPath("$[0].department_ID").isNotEmpty());
+	      .andExpect(MockMvcResultMatchers.jsonPath("$[0].employeeID").isNotEmpty());
 	}
 	
 	@Test
 	public void createEmployeeAPI() throws Exception 
 	{
 	  mvc.perform( MockMvcRequestBuilders
-		      .post("/api/departments")
-		      .content(asJsonString(new Department(0,"IT", "Information Technology")))
+		      .post("/api/employees")
+		      .content(asJsonString(new Employee(1,"John", "John",22222l,"j","33333",null)))
 		      .contentType(MediaType.APPLICATION_JSON)
 		      .accept(MediaType.APPLICATION_JSON))
 	      .andExpect(status().isCreated());
@@ -59,25 +60,26 @@ public class DepartmentControllerTests {
 	
 	
 	@Test
-	public void deleteDepartment() throws Exception 
+	public void deleteEmployee() throws Exception 
 	{
 	  mvc.perform(MockMvcRequestBuilders
-	  			.delete("/api/departments/6")
+	  			.delete("/api/employees/152")
 	  			.accept(MediaType.APPLICATION_JSON))
 	      .andDo(print())
 	      .andExpect(status().isOk());
 	}
 	
 	@Test
-	public void getDepartmentById() throws Exception 
+	public void getEmployeeById() throws Exception 
 	{
 	  mvc.perform(MockMvcRequestBuilders
-	  			.get("/api/departments/53")
+	  			.get("/api/employees/302")
 	  			.accept(MediaType.APPLICATION_JSON))
 	      .andDo(print())
 	      .andExpect(status().isOk())
-	      .andExpect(MockMvcResultMatchers.jsonPath("$.department_ID").isNotEmpty());
+	      .andExpect(MockMvcResultMatchers.jsonPath("$.employeeID").isNotEmpty());
 	}
-    
-    
+  
+  
+
 }
